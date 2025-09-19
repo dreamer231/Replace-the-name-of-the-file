@@ -1,20 +1,26 @@
 import PySide6,sys
-from PySide6.QtWidgets import QTextEdit
+from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWidget,QPushButton,QFileDialog
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction
+from PathSelector import PathSelector
 
-class MainWindow(PySide6.QtWidgets.QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("My Application")
         self.setGeometry(100, 100, 800, 600)
+        self.workplace_selector()
+
 
     def workplace_selector(self) -> None:       #the method of choosing workplace
-        text_edit = QTextEdit()
-        self.setCentralWidget(text_edit)
-        text_edit.setPlainText("Welcome to the workplace selector!")
-        
+        self.path_selector = PathSelector(self)
+        self.path_selector.setWindowModality(Qt.ApplicationModal)
+        self.path_selector.setlayout
 
-
-
+    def layout(self) -> None:
+        main_layout = QGridLayout()
+        self.setLayout(main_layout)
+        main_layout.addWidget(self.path_selector, 0, 0)
 
 
 if __name__ == "__main__":
