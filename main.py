@@ -3,24 +3,55 @@ from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWi
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction
 from PathSelector import PathSelector
+from copy__rename_file import copy_and_rename_file
+from get_data import read_excel_column
+from FileSelector import FileSelector
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("My Application")
         self.setGeometry(100, 100, 800, 600)
-        self.workplace_selector()
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+        self.src_file_selector()
+        self.dst_path_selector()
+        self.get_rename()
+        self.layout()
 
+    def src_file_selector(self) -> None:       #the method of choosing workplace
+        self.src_file_selector = FileSelector()
+        self.src_file_selector.setWindowModality(Qt.ApplicationModal)
 
-    def workplace_selector(self) -> None:       #the method of choosing workplace
-        self.path_selector = PathSelector(self)
-        self.path_selector.setWindowModality(Qt.ApplicationModal)
-        self.path_selector.setlayout
+    def dst_path_selector(self) -> None:       #the method of choosing workplace
+        self.dst_path_selector = PathSelector()
+        self.dst_path_selector.setWindowModality(Qt.ApplicationModal)
 
+    def get_rename(self) -> None:
+        self.renamedata_selector = FileSelector()
+
+        
+    def file_operations(self) -> None:
+        src_file = self.src_file_selector.file_edit.text()
+        dst_path_raw = self.dst_path_selector.path_edit.text()
+        #process_data = read_excel_column("智网2301班名单.xlsx", "Sheet1", column_name="姓名")
+        list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=1)
+        for name in list_dst_path_processed:
+            dst_path_processed = dst_path_raw + '/' + name
+            if src_file and dst_path_processed:
+                copy_and_rename_file(src_file, dst_path_processed)
+        else:
+            print("请先选择源文件和目标文件路径")   #please choose source file and destination file first
+    
     def layout(self) -> None:
         main_layout = QGridLayout()
-        self.setLayout(main_layout)
-        main_layout.addWidget(self.path_selector, 0, 0)
+        self.central_widget.setLayout(main_layout)
+        main_layout.addWidget(self.src_file_selector, 0, 0)
+        main_layout.addWidget(self.dst_path_selector, 1, 0)
+        main_layout.addWidget(self.renamedata_selector, 2, 0)
+        self.run_button = QPushButton("执行文件操作")
+        self.run_button.clicked.connect(self.file_operations)
+        main_layout.addWidget(self.run_button, 3, 0)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ import PySide6
 from PySide6.QtWidgets import QFileDialog, QWidget, QHBoxLayout, QPushButton, QLabel,QTextEdit,QInputDialog, QLineEdit
 from PySide6.QtCore import QDir
 
-class PathSelector(QWidget):
+class FileSelector(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.initUI()
@@ -11,14 +11,14 @@ class PathSelector(QWidget):
         # 创建水平布局
         layout_main = QHBoxLayout()
         # 创建输入框
-        self.path_edit = QLineEdit()
-        self.path_edit.setObjectName("path_edit")
-        self.path_edit.setStyleSheet("""
+        self.file_edit = QLineEdit()
+        self.file_edit.setObjectName("path_edit")
+        self.file_edit.setStyleSheet("""
             QLineEdit#path_edit {
                 font-size: 16px;
             }
         """)
-        layout_main.addWidget(self.path_edit)
+        layout_main.addWidget(self.file_edit)
         # 创建按钮
         self.btn = QPushButton('浏览...')
         self.btn.setObjectName("btn")
@@ -33,18 +33,19 @@ class PathSelector(QWidget):
         self.setLayout(layout_main)
 
     def open_dialog(self) -> None:
-        # 打开目录选择对话框
-        directory = QFileDialog.getExistingDirectory(
-            self, 
-            "选择目录", 
-            QDir.homePath(),  # 初始目录设置为用户主目录
-            QFileDialog.Option.ShowDirsOnly| QFileDialog.Option.DontResolveSymlinks
+        # 打开文件选择对话框
+        file_info = QFileDialog.getOpenFileName(
+            self,
+            "选择文件", 
+            "",  # 文件过滤器
+            options=QFileDialog.Option.DontResolveSymlinks
         )
-        if directory:
-            self.path_edit.setText(directory)
+        # 如果用户选择了文件（非空），则更新输入框
+        if file_info[0]:
+            self.file_edit.setText(file_info[0])
 
 if __name__ == "__main__":
     app = PySide6.QtWidgets.QApplication([])
-    selector = PathSelector()
+    selector = FileSelector()
     selector.show()
     app.exec()
