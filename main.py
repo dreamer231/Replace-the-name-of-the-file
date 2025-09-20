@@ -6,6 +6,7 @@ from PathSelector import PathSelector
 from copy__rename_file import copy_and_rename_file
 from get_data import read_excel_column
 from FileSelector import FileSelector
+import os
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
@@ -37,7 +38,8 @@ class MainWindow(QMainWindow):
         #process_data = read_excel_column("智网2301班名单.xlsx", "Sheet1", column_name="姓名")
         list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=1)
         for name in list_dst_path_processed:
-            dst_path_processed = dst_path_raw + '/' + name
+            name = str
+            dst_path_processed = os.path.join(dst_path_raw, name)
             if src_file and dst_path_processed:
                 copy_and_rename_file(src_file, dst_path_processed)
         else:
