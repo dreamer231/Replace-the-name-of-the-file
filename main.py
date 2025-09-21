@@ -1,3 +1,8 @@
+"""
+A PySide6 application that allows users to select a source file, a destination path,
+and a file containing rename data, then copies and renames the source file to the destination
+
+"""
 import PySide6,sys
 from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWidget,QPushButton,QFileDialog
 from PySide6.QtCore import Qt
@@ -35,7 +40,6 @@ class MainWindow(QMainWindow):
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
-        #process_data = read_excel_column("智网2301班名单.xlsx", "Sheet1", column_name="姓名")
         list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=1)
         for name in list_dst_path_processed:
             name = str
