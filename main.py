@@ -23,6 +23,7 @@ class MainWindow(QMainWindow):
         self.src_file_selector()
         self.dst_path_selector()
         self.get_rename()
+        self.file_formations()
         self.layout()
 
     def src_file_selector(self) -> None:       #the method of choosing workplace
@@ -35,14 +36,18 @@ class MainWindow(QMainWindow):
 
     def get_rename(self) -> None:
         self.renamedata_selector = FileSelector()
+    
+    def file_formations(self) -> None:
+        self.input_file_format = QTextEdit()
+        self.input_file_format.setPlaceholderText("请输入文件格式，如：.jpg")
 
         
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
-        list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=1)
+        list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=0)
         for name in list_dst_path_processed:
-            name = str
+            name = name + self.input_file_format.toPlainText()
             dst_path_processed = os.path.join(dst_path_raw, name)
             if src_file and dst_path_processed:
                 copy_and_rename_file(src_file, dst_path_processed)
@@ -55,6 +60,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.src_file_selector, 0, 0)
         main_layout.addWidget(self.dst_path_selector, 1, 0)
         main_layout.addWidget(self.renamedata_selector, 2, 0)
+        main_layout.addWidget(self.input_file_format, 2, 1)
         self.run_button = QPushButton("执行文件操作")
         self.run_button.clicked.connect(self.file_operations)
         main_layout.addWidget(self.run_button, 3, 0)
