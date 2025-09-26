@@ -29,13 +29,17 @@ class MainWindow(QMainWindow):
     def src_file_selector(self) -> None:       #the method of choosing workplace
         self.src_file_selector = FileSelector()
         self.src_file_selector.setWindowModality(Qt.ApplicationModal)
+        self.src_file_selector.file_edit.setPlaceholderText("请选择源文件")
 
     def dst_path_selector(self) -> None:       #the method of choosing workplace
         self.dst_path_selector = PathSelector()
         self.dst_path_selector.setWindowModality(Qt.ApplicationModal)
+        self.dst_path_selector.path_edit.setPlaceholderText("请选择目标文件夹")
 
     def get_rename(self) -> None:
         self.renamedata_selector = FileSelector()
+        self.renamedata_selector.setWindowModality(Qt.ApplicationModal)
+        self.renamedata_selector.file_edit.setPlaceholderText("请选择重命名数据文件")
     
     def file_formations(self) -> None:
         self.input_file_format = QTextEdit()
