@@ -4,7 +4,7 @@ and a file containing rename data, then copies and renames the source file to th
 前缀、后缀用装饰器加
 """
 import PySide6,sys
-from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWidget,QPushButton,QFileDialog
+from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWidget,QPushButton,QFileDialog,QComboBox
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction
 from PathSelector import PathSelector
@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
         self.dst_path_selector()
         self.get_rename()
         self.file_formations()
+        self.excel_choose()
         self.layout()
 
     def src_file_selector(self) -> None:       #the method of choosing workplace
@@ -45,11 +46,21 @@ class MainWindow(QMainWindow):
         self.input_file_format = QTextEdit()
         self.input_file_format.setPlaceholderText("请输入文件格式，如：.jpg")
 
+    def excel_choose(self) -> None:
+        self.excel_indexorname = QComboBox()
+        self.excel_indexorname.addItems(["列索引（如：0）", "列标题（如：姓名）", "列名（如：A）"])
+        self.excel_index = QTextEdit()
+        self.excel_index.setPlaceholderText("请输入列")
         
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
-        list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=0)         
+        column_str = self.excel_index.toPlainText()
+        column_type = self.excel_indexorname.currentIndex()             #考虑True选择name,False选择index怎么实现
+        if column_type:  # 列索引
+            list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_name=column_str)    
+        else:  # 列标题
+            list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=int(column_str))     
         for name in list_dst_path_processed:
             name = name + self.input_file_format.toPlainText()
             dst_path_processed = os.path.join(dst_path_raw, name)
@@ -65,6 +76,8 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.dst_path_selector, 1, 0)
         main_layout.addWidget(self.renamedata_selector, 2, 0)
         main_layout.addWidget(self.input_file_format, 2, 1)
+        main_layout.addWidget(self.excel_indexorname, 0, 1)
+        main_layout.addWidget(self.excel_index, 1, 1)
         self.run_button = QPushButton("执行文件操作")
         self.run_button.clicked.connect(self.file_operations)
         main_layout.addWidget(self.run_button, 3, 0)
