@@ -1,4 +1,13 @@
 import pandas as pd
+import re
+
+def is_english_alpha_regex(text):
+    """使用正则表达式检查是否只包含英文字母"""
+    if not text:
+        return False
+    # ^[a-zA-Z]+$ 匹配一个或多个英文字母
+    return bool(re.match(r'^[a-zA-Z]+$', text))
+
 
 def read_excel_column(file_path, sheet_name, column_name=None, column_index=None):
     """
@@ -20,7 +29,7 @@ def read_excel_column(file_path, sheet_name, column_name=None, column_index=None
         # 根据列名或列索引选择列
         if column_name:
             # 如果column_name是字母（如'A'），则转换为列索引
-            if isinstance(column_name, str) and column_name.isalpha():
+            if isinstance(column_name, str) and is_english_alpha_regex(column_name):
                 column_index = ord(column_name.upper()) - ord('A')
                 column_data = df.iloc[:, column_index]
             else:
@@ -41,13 +50,13 @@ def read_excel_column(file_path, sheet_name, column_name=None, column_index=None
 # 使用示例
 if __name__ == "__main__":
     # 示例1: 通过列名（字母）读取
-    data_a = read_excel_column("智网2301班名单.xlsx", "Sheet1", column_name="B")
+    data_a = read_excel_column("C:\\github repo\\Replace the name of the file\\test_data\\3班名单.xlsx", "Sheet1", column_name="B")
     print(f"A列数据: {data_a}")
     
     # 示例2: 通过列标题读取
-    data_name = read_excel_column("智网2301班名单.xlsx", "Sheet1", column_name="姓名")
+    data_name = read_excel_column("C:\\github repo\\Replace the name of the file\\test_data\\3班名单.xlsx", "Sheet1", column_name="姓名")
     print(f"姓名列数据: {data_name}")
     
     # 示例3: 通过列索引读取
-    data_index = read_excel_column("智网2301班名单.xlsx", "Sheet1", column_index=1)
+    data_index = read_excel_column("C:\\github repo\\Replace the name of the file\\test_data\\3班名单.xlsx", "Sheet1", column_index=1)
     print(f"第3列数据: {data_index}")

@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
-        list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=0)
+        list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=0)         
         for name in list_dst_path_processed:
             name = name + self.input_file_format.toPlainText()
             dst_path_processed = os.path.join(dst_path_raw, name)
