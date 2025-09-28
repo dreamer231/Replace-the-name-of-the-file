@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
         self.get_rename()
         self.file_formations()
         self.excel_choose()
+        self.display_rename()
         self.layout()
 
     def src_file_selector(self) -> None:       #the method of choosing workplace
@@ -51,16 +52,23 @@ class MainWindow(QMainWindow):
         self.excel_indexorname.addItems(["列索引（如：0）", "列标题（如：姓名）", "列名（如：A）"])
         self.excel_index = QTextEdit()
         self.excel_index.setPlaceholderText("请输入列")
+
+    def display_rename(self) -> None:
+        self.display_rename_widget = QTextEdit()
+        self.display_rename_widget.setPlaceholderText("重命名预览")
+        self.display_rename_widget.setReadOnly(True)
         
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
         column_str = self.excel_index.toPlainText()
         column_type = self.excel_indexorname.currentIndex()             #考虑True选择name,False选择index怎么实现
+        #list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", (lambda column_type:column_name=column_str if column_type else column_index=int(column_str)))    
         if column_type:  # 列索引
             list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_name=column_str)    
         else:  # 列标题
             list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=int(column_str))     
+        
         for name in list_dst_path_processed:
             name = name + self.input_file_format.toPlainText()
             dst_path_processed = os.path.join(dst_path_raw, name)
@@ -78,6 +86,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.input_file_format, 2, 1)
         main_layout.addWidget(self.excel_indexorname, 0, 1)
         main_layout.addWidget(self.excel_index, 1, 1)
+        main_layout.addWidget(self.display_rename_widget, 3, 1)
         self.run_button = QPushButton("执行文件操作")
         self.run_button.clicked.connect(self.file_operations)
         main_layout.addWidget(self.run_button, 3, 0)
