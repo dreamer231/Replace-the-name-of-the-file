@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         self.get_rename()
         self.file_formations()
         self.excel_choose()
-        self.display_rename()
+        self.display_rename_widget()
         self.layout()
 
     def src_file_selector(self) -> None:       #the method of choosing workplace
@@ -53,11 +53,16 @@ class MainWindow(QMainWindow):
         self.excel_index = QTextEdit()
         self.excel_index.setPlaceholderText("请输入列")
 
-    def display_rename(self) -> None:
+    def display_rename_widget(self) -> None:
         self.display_rename_widget = QTextEdit()
         self.display_rename_widget.setPlaceholderText("重命名预览")
         self.display_rename_widget.setReadOnly(True)
-        
+        self.display_rename_widget_button = QPushButton("预览")
+        self.display_rename_widget_button.clicked.connect(self.update_display_rename)
+
+    def update_display_rename(self) -> None:
+        self.display_rename_widget.setPlainText("xxx"+self.input_file_format.toPlainText())
+
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
@@ -87,6 +92,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.excel_indexorname, 0, 1)
         main_layout.addWidget(self.excel_index, 1, 1)
         main_layout.addWidget(self.display_rename_widget, 3, 1)
+        main_layout.addWidget(self.display_rename_widget_button, 4, 1)
         self.run_button = QPushButton("执行文件操作")
         self.run_button.clicked.connect(self.file_operations)
         main_layout.addWidget(self.run_button, 3, 0)
