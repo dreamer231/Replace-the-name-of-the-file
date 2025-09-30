@@ -1,7 +1,7 @@
 """
 A PySide6 application that allows users to select a source file, a destination path,
 and a file containing rename data, then copies and renames the source file to the destination
-前缀、后缀用装饰器加
+前缀、后缀在展示窗加，自动识别xxx然后分解字符串，最后将xxx换成重命名数据
 """
 import PySide6,sys
 from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWidget,QPushButton,QFileDialog,QComboBox
@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
     
     def file_formations(self) -> None:
         self.input_file_format = QTextEdit()
-        self.input_file_format.setPlaceholderText("请输入文件格式，如：.jpg")
+        self.input_file_format.setPlaceholderText("请输入文件格式，如：jpg")
 
     def excel_choose(self) -> None:
         self.excel_indexorname = QComboBox()
@@ -60,8 +60,10 @@ class MainWindow(QMainWindow):
         self.display_rename_widget_button = QPushButton("预览")
         self.display_rename_widget_button.clicked.connect(self.update_display_rename)
 
+    def rename_front
+
     def update_display_rename(self) -> None:
-        self.display_rename_widget.setPlainText("xxx"+self.input_file_format.toPlainText())
+        self.display_rename_widget.setPlainText("xxx" + '.' + self.input_file_format.toPlainText())
 
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
@@ -75,7 +77,7 @@ class MainWindow(QMainWindow):
             list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=int(column_str))     
         
         for name in list_dst_path_processed:
-            name = name + self.input_file_format.toPlainText()
+            name = name + '.' + self.input_file_format.toPlainText()
             dst_path_processed = os.path.join(dst_path_raw, name)
             if src_file and dst_path_processed:
                 copy_and_rename_file(src_file, dst_path_processed)
