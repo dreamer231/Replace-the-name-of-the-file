@@ -1,7 +1,7 @@
 """
 A PySide6 application that allows users to select a source file, a destination path,
 and a file containing rename data, then copies and renames the source file to the destination
-前缀、后缀在展示窗加，自动识别xxx然后分解字符串，最后将xxx换成重命名数据
+前缀、后缀在展示窗加，自动识别xxx然后分解字符串，最后将xxx换成重命名数据，yes
 """
 import PySide6,sys
 from PySide6.QtWidgets import QTextEdit,QGridLayout,QMainWindow,QApplication,QWidget,QPushButton,QFileDialog,QComboBox
