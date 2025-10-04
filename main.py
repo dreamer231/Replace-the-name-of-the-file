@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
             list_dst_path_processed = read_excel_column(self.renamedata_selector.file_edit.text(), "Sheet1", column_index=int(column_str))     
         
         for name in list_dst_path_processed:
-            name = name + '.' + self.input_file_format.toPlainText()
+            name = self.display_rename_widget.toPlainText().replace('xxx', name) + '.' + self.input_file_format.toPlainText()
             dst_path_processed = os.path.join(dst_path_raw, name)
             if src_file and dst_path_processed:
                 copy_and_rename_file(src_file, dst_path_processed)
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.excel_indexorname, 0, 1)
         main_layout.addWidget(self.excel_index, 1, 1)
         main_layout.addWidget(self.display_rename_widget, 3, 1)
-        main_layout.addWidget(self.display_rename_widget_button, 4, 1)
+        main_layout.addWidget(self.display_rename_button, 4, 1)
         self.run_button = QPushButton("执行文件操作")
         self.run_button.clicked.connect(self.file_operations)
         main_layout.addWidget(self.run_button, 3, 0)
