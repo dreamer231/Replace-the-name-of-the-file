@@ -57,14 +57,17 @@ class MainWindow(QMainWindow):
         self.display_rename_widget = QTextEdit()
         self.display_rename_widget.setPlaceholderText("重命名预览")
         self.display_rename_widget.setReadOnly(True)
-        self.display_rename_widget_button = QPushButton("预览")
-        self.display_rename_widget_button.clicked.connect(self.update_display_rename)
-
-    def rename_front
+        self.display_rename_button = QPushButton("预览")
+        self.display_rename_button.clicked.connect(self.update_display_rename)
+        self.edit_rename_button = QPushButton("编辑")
+        self.edit_rename_button.clicked.connect(self.edit_rename)
 
     def update_display_rename(self) -> None:
         self.display_rename_widget.setPlainText("xxx" + '.' + self.input_file_format.toPlainText())
 
+    def edit_rename(self) -> None:
+        self.display_rename_widget.setReadOnly(False)
+        
     def file_operations(self) -> None:
         src_file = self.src_file_selector.file_edit.text()
         dst_path_raw = self.dst_path_selector.path_edit.text()
